@@ -1,0 +1,13 @@
+#intro .jumbotron{
+    height:700px;
+}
+.h1, h1{
+    font-size: 52px
+}
+
+.register{
+    padding-right: 15px;
+padding-left: 15px;
+margin-right: auto;
+margin-left: auto;
+}
