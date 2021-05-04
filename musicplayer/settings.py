@@ -26,7 +26,7 @@ SECRET_KEY = 'rbh8%u_$en!zodi6j_ual3azei=2(@yd1zrl7n0kz^t!xe$t2o'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['54.172.149.118']
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
 # Application definition
@@ -165,10 +165,10 @@ SITE_ID = 1
 
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
-# LOGIN_URL = 'login'
-# LOGOUT_URL = 'logout'
-LOGIN_REDIRECT_URL = 'index'
-# LOGOUT_REDIRECT_URL = 'index'
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
+LOGIN_REDIRECT_URL = 'profile'
+LOGOUT_REDIRECT_URL = 'index'
 
 SOCIALACCOUNT_QUERY_EMAIL = True
 SOCIALACCOUNT_PROVIDERS = {

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block body %}
+    <main id="pageWrapper">
+        <div class="banner bg-song"></div>
+        <div class="main-container">
+            <div class="row section">
+                <div class="col-xl-10 col-md-12 mx-auto">
+                    <div class="card">
+                      <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ sform|crispy }}
+                        <button type="submit" class="btn btn-primary">Upload</button>
+                      </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
