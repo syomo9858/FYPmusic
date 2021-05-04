@@ -71,3 +71,18 @@ class Favourite(models.Model):
 class Recent(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     song = models.ForeignKey(Song, on_delete=models.CASCADE)
+
+
+
+class Comment(models.Model):
+    song = models.ForeignKey(
+        Song, on_delete=models.CASCADE, related_name='comments')
+    Creator = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    body = models.TextField()
+    created_on = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['created_on']
+
+    def __str__(self):
+        return 'Comment {} by {}'.format(self.body, self.Creator)

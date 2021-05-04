@@ -5,6 +5,12 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from .models import *
 
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ("body","Creator")
+        
+        
 class LoginForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)
 

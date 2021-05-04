@@ -5,7 +5,7 @@ from musicapp.views import *
 
 # Add URLConf
 urlpatterns = [
-    path('index/', views.index, name='index'),
+    path('index/', index, name='index'),
     path('', views.index1, name='Index'),
     path('<int:song_id>/', views.detail, name='detail'),
     path('mymusic/', views.mymusic, name='mymusic'),

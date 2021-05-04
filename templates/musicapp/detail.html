@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load socialaccount %}
+{% load crispy_forms_tags %}
 {% block title %} Detail {% endblock title %}
 {% block header %}
 <style>
@@ -117,8 +118,58 @@
                 </div>
             </div>
         </div>
+                            <div class="col-md-8 card mb-4  mt-3 ">
+                          <div class="card-body">
+                            <!-- comments -->
+                            {% with comments.count as total_comments %}
+                            <h2>{{ total_comments }} comments</h2>
+                    
+                            <p>
+                              {% endwith %} {% for comment in comments %}
+                            </p>
+                    
+                            <div class="comments" style="padding: 10px;">
+                              <p class="font-weight-bold">
+                                {{ comment.Creator }}
+                                <span class=" text-muted font-weight-normal">
+                                  {{ comment.created_on }}
+                                </span>
+                              </p>
+                              {{ comment.body | linebreaks }}
+                            </div>
+                    
+                            {% endfor %}
+                          </div>
+                        </div>
+                        <div class="col-md-8 card mb-4  mt-3 ">
+                          <div class="card-body">
+                            {% if new_comment %}
+                            <div class="alert alert-success" role="alert">
+                              Your comment is awaiting moderation
+                            </div>
+                            {% else %}
+                            <h3>Leave a comment</h3>
+                            <form method="post" style="margin-top: 1.3em;">
+                              {{ comment_form|crispy }}
+                              {% csrf_token %}
+                              <button type="submit" class="btn btn-primary  btn-lg">Submit</button>
+                            </form>
+                            {% endif %}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
     </div>
 </div>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+
 
 <footer class="footer">
     <div class="player" style="padding-left: 10px;padding-top:10px;background-color: #2c3e50;">

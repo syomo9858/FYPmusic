@@ -7,6 +7,7 @@ from django.views.generic import CreateView, DetailView, DeleteView, ListView
 from django.utils.decorators import method_decorator
 from django.urls import reverse, reverse_lazy
 from .forms import *
+from .forms import CommentForm
     
 AUDIO_FILE_TYPES = ['wav', 'mp3', 'ogg']
 IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg']
@@ -92,11 +93,11 @@ def index(request):
             last_played_song = Song.objects.get(id=last_played_id)
         else:
             first_time = True
-            last_played_song = Song.objects.get(id=7)
+            last_played_song = Song.objects.get(id=1)
 
     else:
         first_time = True
-        last_played_song = Song.objects.get(id=7)
+        last_played_song = Song.objects.get(id=1)
 
     #Display all songs
     songs = Song.objects.all()
@@ -170,7 +171,7 @@ def Soul_songs(request):
         last_played_id = last_played_list[0]['song_id']
         last_played_song = Song.objects.get(id=last_played_id)
     else:
-        last_played_song = Song.objects.get(id=7)
+        last_played_song = Song.objects.get(id=1)
 
     query = request.GET.get('q')
 
@@ -192,7 +193,7 @@ def Emo_songs(request):
         last_played_id = last_played_list[0]['song_id']
         last_played_song = Song.objects.get(id=last_played_id)
     else:
-        last_played_song = Song.objects.get(id=7)
+        last_played_song = Song.objects.get(id=1)
 
     query = request.GET.get('q')
 
@@ -214,7 +215,7 @@ def Jazz_songs(request):
         last_played_id = last_played_list[0]['song_id']
         last_played_song = Song.objects.get(id=last_played_id)
     else:
-        last_played_song = Song.objects.get(id=7)
+        last_played_song = Song.objects.get(id=1)
 
     query = request.GET.get('q')
 
@@ -236,7 +237,7 @@ def Trap_songs(request):
         last_played_id = last_played_list[0]['song_id']
         last_played_song = Song.objects.get(id=last_played_id)
     else:
-        last_played_song = Song.objects.get(id=7)
+        last_played_song = Song.objects.get(id=1)
 
     query = request.GET.get('q')
 
@@ -258,7 +259,7 @@ def BoomBap_songs(request):
         last_played_id = last_played_list[0]['song_id']
         last_played_song = Song.objects.get(id=last_played_id)
     else:
-        last_played_song = Song.objects.get(id=7)
+        last_played_song = Song.objects.get(id=1)
 
     query = request.GET.get('q')
 
@@ -280,7 +281,7 @@ def Rock_songs(request):
         last_played_id = last_played_list[0]['song_id']
         last_played_song = Song.objects.get(id=last_played_id)
     else:
-        last_played_song = Song.objects.get(id=7)
+        last_played_song = Song.objects.get(id=1)
 
     query = request.GET.get('q')
 
@@ -302,7 +303,7 @@ def Autotunes_songs(request):
         last_played_id = last_played_list[0]['song_id']
         last_played_song = Song.objects.get(id=last_played_id)
     else:
-        last_played_song = Song.objects.get(id=7)
+        last_played_song = Song.objects.get(id=1)
 
     query = request.GET.get('q')
 
@@ -361,7 +362,7 @@ def all_songs(request):
             last_played_song = Song.objects.get(id=last_played_id)
     else:
         first_time = True
-        last_played_song = Song.objects.get(id=7)
+        last_played_song = Song.objects.get(id=1)
 
     
     # apply search filters
@@ -404,7 +405,7 @@ def recent(request):
         last_played_id = last_played_list[0]['song_id']
         last_played_song = Song.objects.get(id=last_played_id)
     else:
-        last_played_song = Song.objects.get(id=7)
+        last_played_song = Song.objects.get(id=1)
 
     #Display recent songs
     recent = list(Recent.objects.filter(user=request.user).values('song_id').order_by('-id'))
@@ -428,8 +429,24 @@ def recent(request):
 
 
 @login_required(login_url='login')
-def detail(request, song_id):
+def detail(request, song_id,):
     songs = Song.objects.filter(id=song_id).first()
+    song = get_object_or_404(Song)
+    comments = song.comments.filter()
+    new_comment = None
+    # Comment posted
+    if request.method == 'POST':
+        comment_form = CommentForm(data=request.POST)
+        if comment_form.is_valid():
+
+            # Create Comment object but don't save to database yet
+            new_comment = comment_form.save(commit=False)
+            # Assign the current post to the comment
+            new_comment.song = song
+            # Save the comment to the database
+            new_comment.save()
+    else:
+        comment_form = CommentForm()
 
     # Add data to recent database
     if list(Recent.objects.filter(song=songs,user=request.user).values()):
@@ -444,7 +461,7 @@ def detail(request, song_id):
         last_played_id = last_played_list[0]['song_id']
         last_played_song = Song.objects.get(id=last_played_id)
     else:
-        last_played_song = Song.objects.get(id=7)
+        last_played_song = Song.objects.get(id=1)
 
 
     playlists = Playlist.objects.filter(user=request.user).values('playlist_name').distinct
@@ -473,8 +490,11 @@ def detail(request, song_id):
             messages.success(request, "Removed from favorite!")
             return redirect('detail', song_id=song_id)
 
-    context = {'songs': songs, 'playlists': playlists, 'is_favourite': is_favourite,'last_played':last_played_song}
-    return render(request, 'musicapp/detail.html', context=context)
+    context = {'songs': songs, 'playlists': playlists, 'is_favourite': is_favourite,'last_played':last_played_song, 
+                                           'comments': comments,
+                                           'new_comment': new_comment,
+                                           'comment_form': comment_form}
+    return render(request, 'musicapp/detail.html', context=context) 
 
 
 def mymusic(request):
