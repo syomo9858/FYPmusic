@@ -8,8 +8,10 @@ from .models import *
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ("body","Creator")
         
+        fields = ("body",)
+        
+
         
 class LoginForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)

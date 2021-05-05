@@ -38,7 +38,7 @@ class Song(models.Model):
             ('Trap','Trap'),
             ('Auto-tunes','Auto-tunes')
           )
-    Creator = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    Creator = models.ForeignKey(User, on_delete=models.CASCADE, default='15')
     name = models.CharField(max_length=200)
     album = models.CharField(max_length=200)
     SongType = models.CharField(max_length=20,choices=SongType_Choice,default='')
@@ -77,12 +77,13 @@ class Recent(models.Model):
 class Comment(models.Model):
     song = models.ForeignKey(
         Song, on_delete=models.CASCADE, related_name='comments')
-    Creator = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    Creator = models.ForeignKey(User, on_delete=models.CASCADE,default='15')
     body = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
-
+      
     class Meta:
         ordering = ['created_on']
 
     def __str__(self):
         return 'Comment {} by {}'.format(self.body, self.Creator)
+    

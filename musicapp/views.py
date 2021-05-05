@@ -429,16 +429,16 @@ def recent(request):
 
 
 @login_required(login_url='login')
-def detail(request, song_id,):
+def detail(request, song_id):
     songs = Song.objects.filter(id=song_id).first()
     song = get_object_or_404(Song)
     comments = song.comments.filter()
     new_comment = None
     # Comment posted
     if request.method == 'POST':
-        comment_form = CommentForm(data=request.POST)
+        comment_form = CommentForm(request.POST or None)
         if comment_form.is_valid():
-
+            
             # Create Comment object but don't save to database yet
             new_comment = comment_form.save(commit=False)
             # Assign the current post to the comment
