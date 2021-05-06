@@ -61,7 +61,7 @@ def SongUploadView(request):
             return redirect('index.html')
     else:
         sform = SongUploadForm()
-    return render(request, 'musicapp/upload.html', {
+    return render(request, 'musicapp/upload', {
         'sform': sform
     })
 
