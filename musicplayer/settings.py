@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     
     # external
     'crispy_forms',
-    'storages',
     
     # apps
     'authentication.apps.AuthenticationConfig',
