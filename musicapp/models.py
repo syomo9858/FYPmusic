@@ -34,7 +34,7 @@ class Song(models.Model):
             ('Rock','Rock'),
             ('Jazz/Blues','Jazz/Blues'),
             ('Emo','Emo'),
-            ('Bomb bap','Bomb bap'),
+            ('BoomBap','BoomBap'),
             ('Trap','Trap'),
             ('Auto-tunes','Auto-tunes')
           )

@@ -1,15 +1,13 @@
 {% extends 'base.html' %}
 {% load socialaccount %}
-{% block title %} Souls Songs {% endblock title %}
+{% block title %} Soul Songs {% endblock title %}
 
 {% block body %}
 
-<br>
-
-<!-- Hindi Songs -->
+<!-- Boom Bap Songs -->
 <div class="container" style="margin-bottom: 20px;">
   <header class="section-heading">
-    <h5 class="section-title">Souls SONGS</h5>
+    <h5 class="section-title">Soul songs</h5>
   </header>
   <hr>
   <!-- Song list -->
@@ -21,6 +19,8 @@
         <img src="{{ song.song_img.url}}" class="img-responsive" height="135" width="135"
           style="border-radius: 8px 8px 8px 8px;">
         <div class="overlay">
+          <a class="btn btn-outline-light mt-5 mx-1" href="{% url 'play_song' song.id %}"><i class="fa fa-play"
+              aria-hidden="true"></i></a>
           <a class="btn btn-outline-light mt-5 mx-1" href="{% url 'detail' song.id %}"><i class="fa fa-info-circle"
               aria-hidden="true"></i></a>
         </div>
@@ -32,5 +32,6 @@
   </div>
 </div>
 <br>
+{% include 'music_footer.html' %}
 
 {% endblock body %}

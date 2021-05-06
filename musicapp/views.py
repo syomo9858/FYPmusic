@@ -58,7 +58,7 @@ def SongUploadView(request):
         if sform.is_valid():
             sform.save()
             messages.success(request, f'Your song is uploaded!')
-            return redirect('musicapp/index.html')
+            return redirect('index.html')
     else:
         sform = SongUploadForm()
     return render(request, 'musicapp/upload.html', {
@@ -123,7 +123,7 @@ def index(request):
     indexpage_Emo_songs = Song.objects.filter(id__in=sliced_ids)
     
     # Display Jazz Songs
-    Type_Jazz = list(Song.objects.filter(SongType='Jazz').values('id'))
+    Type_Jazz = list(Song.objects.filter(SongType='Jazz/Blues').values('id'))
     sliced_ids = [each['id'] for each in Type_Jazz][:5]
     indexpage_Jazz_songs = Song.objects.filter(id__in=sliced_ids)
     
@@ -138,7 +138,7 @@ def index(request):
     indexpage_Trap_songs = Song.objects.filter(id__in=sliced_ids)
     
     # Display Auto-Tunes Songs
-    Type_Autotunes = list(Song.objects.filter(SongType='Autotunes').values('id'))
+    Type_Autotunes = list(Song.objects.filter(SongType='Auto-tunes').values('id'))
     sliced_ids = [each['id'] for each in Type_Autotunes][:5]
     indexpage_Autotunes_songs = Song.objects.filter(id__in=sliced_ids)
 
@@ -154,6 +154,9 @@ def index(request):
         'Soul_songs':indexpage_Soul_songs,
         'Rock_songs':indexpage_Rock_songs,
         'Emo_songs':indexpage_Emo_songs,
+        'BoomBap_songs':indexpage_BoomBap_songs,
+        'Trap_songs':indexpage_Trap_songs,
+        'Autotunes_songs':indexpage_Autotunes_songs,
         'last_played':last_played_song,
         'first_time': first_time,
         'query_search':False,
@@ -198,7 +201,7 @@ def Emo_songs(request):
     query = request.GET.get('q')
 
     if query:
-        Soul_songs = Song.objects.filter(Q(name__icontains=query)).distinct()
+        Emo_songs = Song.objects.filter(Q(name__icontains=query)).distinct()
         context = {'Emo_songs': Emo_songs}
         return render(request, 'musicapp/Emo_songs.html', context)
 
@@ -207,7 +210,7 @@ def Emo_songs(request):
 
 def Jazz_songs(request):
 
-    Jazz_songs = Song.objects.filter(SongType='Jazz')
+    Jazz_songs = Song.objects.filter(SongType='Jazz/Blues')
 
     #Last played song
     last_played_list = list(Recent.objects.values('song_id').order_by('-id'))
@@ -264,8 +267,8 @@ def BoomBap_songs(request):
     query = request.GET.get('q')
 
     if query:
-        Jazz_songs = Song.objects.filter(Q(name__icontains=query)).distinct()
-        context = {'BoomBap_songs': Jazz_songs}
+        BoomBap_songs = Song.objects.filter(Q(name__icontains=query)).distinct()
+        context = {'BoomBap_songs': BoomBap_songs}
         return render(request, 'musicapp/BoomBap_songs.html', context)
 
     context = {'BoomBap_songs':BoomBap_songs,'last_played':last_played_song}
@@ -295,7 +298,7 @@ def Rock_songs(request):
     
 def Autotunes_songs(request):
 
-    Autotunes_songs = Song.objects.filter(SongType='Autotunes')
+    Autotunes_songs = Song.objects.filter(SongType='Auto-tunes')
 
     #Last played song
     last_played_list = list(Recent.objects.values('song_id').order_by('-id'))
@@ -324,7 +327,7 @@ def play_song(request, song_id):
         data.delete()
     data = Recent(song=songs,user=request.user)
     data.save()
-    return redirect('all_songs')
+    return redirect(request.META['HTTP_REFERER'])
 
 
 @login_required(login_url='login')
@@ -431,7 +434,7 @@ def recent(request):
 @login_required(login_url='login')
 def detail(request, song_id):
     songs = Song.objects.filter(id=song_id).first()
-    song = get_object_or_404(Song)
+    song = get_object_or_404(Song, id=song_id)
     comments = song.comments.filter()
     new_comment = None
     # Comment posted
